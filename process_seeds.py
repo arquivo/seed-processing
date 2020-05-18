@@ -1,25 +1,17 @@
 import requests
 from urllib.parse import urlparse
-from urllib.request import urlopen
 import re
-import urllib
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import click
-from multiprocessing import Process
-from selenium import webdriver
-import threading
 import time
-from urllib.parse import urlparse
 import os
 import multiprocessing
 import glob
 from timeout import timeout
 import fasttext
-import langid
 import argparse
-from builtins import any as b_any
 
 ##Setup information
 
