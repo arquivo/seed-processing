@@ -17,7 +17,8 @@ pip install --upgrade virtualenv
 virtualenv -p python3 venv
 source venv/bin/activate
 pip install -r requirements.txt
-```
+wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin
+``` 
 
 ### Run
 
