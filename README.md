@@ -11,17 +11,18 @@ http://casteleiro-sabugal.new.fr
 ### Setup
 
 ```
-git clone https://github.com/arquivo/mergeWARCs.git
-cd mergeWARCs
+git clone https://github.com/arquivo/seed-processing.git
+cd seed-processing
 pip install --upgrade virtualenv
 virtualenv -p python3 venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
+
 ### Run
 
 ```
-python XXXX.py
+python python process_seeds.py
 ```
 
 ### Parameters
@@ -33,10 +34,10 @@ python XXXX.py
 
 ### Example
 
-Example and default parameters:
+Run the example:
 
 ```
-python 
+python process_seeds.py -f seeds_test.txt -l 5 
 ```
 ### Authors
 
