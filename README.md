@@ -17,7 +17,7 @@ The presented algorithm is a simple decision tree that uses simple and more gene
 3. We identify specific substrings within the redirect URLs, using requests.get() function.
 4. We identify specific substrings within the redirect URLs, using the function get() from selenium (more accurate).
 5. We identify specific substrings present in the body from the website.
-6. Finally, based on the fasttext model, we could identify which language is presented in the text. 
+6. Finally, based on the fasttext model, we can identify which language is presented in the text. 
 
 
 ### Setup
