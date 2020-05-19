@@ -13,10 +13,12 @@ from timeout import timeout
 import fasttext
 import argparse
 
+
 ##Setup information
 
 #Load the model to detect the language fo a text
 model = fasttext.load_model('lid.176.bin')
+
 
 #User Agent od the requests
 headers = {
@@ -57,11 +59,13 @@ combined_text_from_blogspot = "(" + ")|(".join(text_from_blogspot) + ")"
 
 #Parameters
 parser = argparse.ArgumentParser(description='Process seeds')
-parser.add_argument('-f','--file', help='Localization of the file', default= "./seeds.txt")
+parser.add_argument('-f','--file', help='Localization of the file', default= "seeds.txt")
+parser.add_argument('-b','--bin', help='Localization of the binary file of firefox', default= "/usr/bin/firefox")
+parser.add_argument('-p','--path', help='Localization of the geckodriver file of firefox', default= "/data/seed-processing/geckodriver")
 parser.add_argument('-l','--lines', help='Number of lines in each temporary file', type=int, default= 1000)
 args = vars(parser.parse_args())
 
-##The next two functions can be used if you need to put a timeout. Sometimes the timeout of the get functions does not work properly.
+##The next function can be used if you need to put a timeout. Sometimes the timeout of the ".get()" functions does not work properly. The @timeout is used from timeout.py.
 """
 @timeout(10)
 def get_redirect_url(url):
@@ -70,15 +74,7 @@ def get_redirect_url(url):
     redirect_url = response.url
     status = str(response.status_code)
     return status, redirect_url
-
-@timeout(25)
-def driver_get_redirect_url(url):
-    driver.get(url)
-    time.sleep(20)
-    redirect_url = driver.current_url
-    return redirect_url
 """
-
 
 def getlanguage(text):
     """
@@ -97,19 +93,17 @@ def getlanguage(text):
     return final_predict
 
 
-def process_file(file_name):
-
+def process_file(file_name, bin_file, path_geckodriver):
     #First setp is initialize the selenium firefox.
-    binary = r'/usr/bin/firefox'
     options = Options()
     options.set_headless(headless=True)
-    options.binary = binary
+    options.binary = bin_file
     cap = DesiredCapabilities().FIREFOX
     cap["marionette"] = True #optional
     profile = webdriver.FirefoxProfile()
     profile.set_preference("general.useragent.override", "arquivo-web-crawler (compatible; heritrix)")
-    driver = webdriver.Firefox(profile, firefox_options=options, capabilities=cap, executable_path="/data/FORA/geckodriver")
-    driver.set_page_load_timeout(25) 
+    driver = webdriver.Firefox(profile, firefox_options=options, capabilities=cap, executable_path=path_geckodriver)
+    driver.set_page_load_timeout(25)
 
     with open(file_name) as file, open(file_name + "_good", 'w') as file_good, open(file_name + "_lixo", 'w') as file_lixo:
         lines = file.readlines()
@@ -181,19 +175,22 @@ def script():
     #Get the parameters
     file_to_process = args['file']
     lines = args['lines']
+    bin_file = args['bin']
+    path_geckodriver = args['path']
 
     #Sort and get unique urls
     uniq_file = file_to_process.replace(".txt", "_uniq.txt")
     if not os.path.exists(uniq_file):
         os.system("sort " + file_to_process +" | uniq -u > " + uniq_file)
 
+    
     #Split the file into multifiles to do multiprocessing
     os.system("split --lines=" + str(lines) + " --numeric-suffixes --suffix-length=2 " + uniq_file + " t_tmp")    
 
     #Process each file in paralel
     p = multiprocessing.Pool()
     for f in glob.glob("t_tmp*"):
-        p.apply_async(process_file, [f]) 
+        p.apply_async(process_file, [f, bin_file, path_geckodriver]) 
 
     p.close()
     p.join()
