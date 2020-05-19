@@ -30,6 +30,8 @@ python process_seeds.py
 
 <pre>
 -f or --file        --> Localization of the file
+-b or --bin         --> Localization of the binary file of firefox
+-p or --path        --> Localization of the geckodriver file of firefox
 -l or --lines       --> Number of lines in each temporary file
 </pre>
 
