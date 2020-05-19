@@ -23,7 +23,7 @@ wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin
 ### Run
 
 ```
-python python process_seeds.py
+python process_seeds.py
 ```
 
 ### Parameters
